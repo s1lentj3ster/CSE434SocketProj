@@ -2,7 +2,7 @@
 Group 18
 Port range: 10,000 - 10,499
 
-#Functionalities
+### Functionalities
 1.  register <contact-name> <IP-address> <port>
 2.  create <contact-list-name>
 3.  query-lists
