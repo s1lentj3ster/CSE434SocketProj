@@ -19,7 +19,7 @@ while True:
     #Decodes and turns message to uppercase
     modifiedMessage = message.decode().upper()
     
-    print(message.args[1])
+    #print(message.args[1])
     if message.decode()[0].strip() == 'register':
         print("This works too")
     #Attach the address to encoded message and send into serverSocket 
