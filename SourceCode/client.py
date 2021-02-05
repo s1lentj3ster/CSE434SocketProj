@@ -1,9 +1,11 @@
 import sys
 import os
+import string
 from socket import *
+from string import *
 
-serverName = sys.argv[1] #<--- Server IP address here 
-serverPort = sys.argv[2] #Server's port number
+serverName = int(sys.argv[1]) #<--- Server IP address here 
+serverPort = int(sys.argv[2]) #Server's port number
 clientSocket = socket (AF_INET, SOCK_DGRAM) #Creates client's socket
 message = input('Send me something: ') #Send prompt to client
 
