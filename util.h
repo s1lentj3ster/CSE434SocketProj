@@ -1,5 +1,6 @@
 //Client Register Info Structure
 typedef struct{
+    
     char name_client [20];
     char client_IP [20];
     int client_socket;
