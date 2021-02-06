@@ -19,7 +19,10 @@ serverPort = int(sys.argv[1])
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 
 
-#Assigns port 10000 to the server's socket
+#Assigns port to the server's socket
+if serverPort < 10000 or serverPort > 10499:
+    print("Please enter in a port number between 10000 to 10499\n")
+    exit(1)
 serverSocket.bind(('', serverPort))
 
 #Prints server address and message
