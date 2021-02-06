@@ -15,7 +15,10 @@ def createList(reg):
     contactList[name] = {}
     
     feedbackMessage = 'SUCCESS'
-    print(str(contactList).decode('latin'))
+    print('Current List\n')
+    for c_id, c_info in contactList.items():
+        print(c_id)
+    print('\n')
     return feedbackMessage
 
     
