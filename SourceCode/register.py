@@ -1,4 +1,6 @@
 import socket
+import utils
+
 
 def info (database, reg):
     #This is for success/fail return statements
@@ -27,6 +29,7 @@ def info (database, reg):
     
     #Adds new person
     database.add((reg[1], reg[2], reg[3]))
+
     feedback = 'Registration SUCCESS'
     #This function returns the database and feedback string
     return database, feedback

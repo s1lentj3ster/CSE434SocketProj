@@ -1,7 +1,33 @@
-def create(contacts, name):
-    feedbackMessage = ''
-    if name in contacts.values():
-        feedbackMessage = 'FAILURE'
-        return contacts, feedbackMessage
+import socket
+import utils
+from utils import contactList
+
+
+
+
+def createList(reg): 
+    name = reg[1]
+    for n in contactList:
+        if name == contactList[n]:
+            feedbackMessage = 'FAILURE'
+            return feedbackMessage
+
+    contactList[name] = {}
     
-    return contacts, feedbackMessage
+    feedbackMessage = 'SUCCESS'
+    print(str(contactList).decode('latin'))
+    return feedbackMessage
+
+    
+    
+    
+
+        
+         
+
+
+   # if name in contacts.values():
+       # feedbackMessage = 'FAILURE'
+       # return contacts, feedbackMessage
+    
+   # return contacts, feedbackMessage
