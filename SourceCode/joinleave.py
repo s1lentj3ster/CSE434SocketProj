@@ -6,12 +6,15 @@ from utils import databaseSet
 
 feedback = ''
 def join (command):
-    if len(command) != 3:
-        feedback = 'FAIL'
-        return feedback
+    #if len(command) != 2:
+    #    feedback = 'FAIL'
+    #    return feedback
     listName = command[1]
     contactName = command[2]
-    if (contactName in databaseSet) and (listName in contactList) and not(contactName in contactList[listName]):
+    print(contactList)
+    print(databaseSet)
+    if (contactName in databaseSet) and (listName in contactList)and not(contactName in contactList[listName]):
+            
             #ok Im sure there is a more elegant way than this so please feel free to optimize it
             ip = databaseSet[contactName]["IP"]
             port = databaseSet[contactName]["port"]

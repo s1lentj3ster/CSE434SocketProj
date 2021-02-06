@@ -8,7 +8,9 @@ import create
 import utils
 import query
 import joinleave
+import exitsave
 from utils import databaseSet
+from utils import contactList
 
 #Initialize new Dictionaries for Database
 
@@ -35,11 +37,10 @@ while True:
 
     c = command[0]
     if c == "register":
-        print("This works too")
-       
+        print("Registering " + command[1])
+        #Calls register and returns updated database with return message
+        messageToClient = register.info(command)
         
-	#Calls register and returns updated database with return message
-	databaseSet, messageToClient = register.info(databaseSet, command)
     elif c == "create":
         print('make contact')
         messageToClient = create.createList(command)
@@ -51,8 +52,15 @@ while True:
 
     elif c == "join":
         messageToClient = 'Join Me bruh '+joinleave.join(command)
+
     elif c == "leave":
         messageToClient = 'Leaving list '+joinleave.leave(command)
+
+    elif c == "exit":
+        messageToClient = 'Exiting Everything' + exitsave.exit(command)
+    elif c == 'save':
+        messageToClient = 'Saving File ' + exitsave.save(command)
+              
     else: 
         messageToClient = 'IDK what you want, try again, bye'
 
