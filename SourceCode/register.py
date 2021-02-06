@@ -28,7 +28,7 @@ def info (reg):
         return feedback
     
     #Adds new person
-    databaseSet[reg[1]] = {"IP" : reg[2], "Port" : reg[3]}
+    databaseSet[reg[1]] = {"IP" : reg[2], "port" : reg[3]}
 
     feedback = 'Registration SUCCESS'
     #This function returns the database and feedback string

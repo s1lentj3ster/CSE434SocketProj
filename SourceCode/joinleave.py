@@ -11,8 +11,7 @@ def join (command):
     #    return feedback
     listName = command[1]
     contactName = command[2]
-    print(contactList)
-    print(databaseSet)
+    
     if (contactName in databaseSet) and (listName in contactList)and not(contactName in contactList[listName]):
             
             #ok Im sure there is a more elegant way than this so please feel free to optimize it
