@@ -7,15 +7,14 @@ def info (database, reg):
     feedback = ''
 
     #Checks paremeter
-    if len(reg) < 4:
+    if len(reg) != 4:
         feedback += "Register FAIL. Please enter sufficient parameters.\nUsage: register <contact-name> <IP-address> <port>\n"
         return database, feedback
     
     #Checks existing name
-    for x in database:
-        if x[0] == reg[1]:
-            feedback += "Register FAIL. Name already exists\n"
-            return database, feedback
+    if reg[1] in database:
+        feedback += "Register FAIL. Name already exists\n"
+        return database, feedback
 
     #Checks valid IPv4 address
     if reg[2].count('.') < 3:
@@ -28,7 +27,7 @@ def info (database, reg):
         return database, feedback
     
     #Adds new person
-    database.add((reg[1], reg[2], reg[3]))
+    database[reg[1]] = {"IP" : reg[2], "port" : reg[3]}
 
     feedback = 'Registration SUCCESS'
     #This function returns the database and feedback string

@@ -2,15 +2,19 @@ import socket
 import utils
 from utils import contactList
 
-
-
-
 def createList(reg): 
+    #check for valid perimeter numbers
+    if len(reg) != 2 or len(reg[1]) == 0:
+        feedbackMessage = 'FAILURE'
+        return feedbackMessage
+    
+    #set name to input
     name = reg[1]
-    for n in contactList:
-        if name == contactList[n]:
-            feedbackMessage = 'FAILURE'
-            return feedbackMessage
+
+    #check for existing name
+    if name in contactList:
+        feedbackMessage = 'FAILURE'
+        return feedbackMessage
 
     contactList[name] = {}
     
@@ -21,16 +25,3 @@ def createList(reg):
     print('\n')
     return feedbackMessage
 
-    
-    
-    
-
-        
-         
-
-
-   # if name in contacts.values():
-       # feedbackMessage = 'FAILURE'
-       # return contacts, feedbackMessage
-    
-   # return contacts, feedbackMessage

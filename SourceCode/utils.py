@@ -5,4 +5,4 @@ contactList = {}
 
     
 global databaseSet
-databaseSet = set()
+databaseSet = {}
