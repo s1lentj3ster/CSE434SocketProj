@@ -54,24 +54,27 @@ while True:
         #Calls register and returns updated database with return message
             messageToClient = register.info(command)
         else:
-            print('ERROR')
+            print('Error: Registration Failed by Client at IP ' + str(clientAddress[0]))
             messageToClient = 'Register FAIL. Please enter sufficient parameters. \nUsage: register <contact-name> <IP-address> <port>\n'    
         
-    elif c == "create":       
-        messageToClient = create.createList(command)
+    elif "create" in c.lower():
+        if len(command) > 1:
+            messageToClient = create.createList(command)
+        else:
+            print('Error: Create Failed <Work in Prog>')
 
-    elif c == "query-list":	
+    elif "query-list" in c.lower():	
         messageToClient = query.query_list()
        
-    elif c == "join":
+    elif "join" in c.lower():
         messageToClient = joinleave.join(command)
 
-    elif c == "leave":
+    elif "leave" in c.lower():
         messageToClient = joinleave.leave(command)
 
-    elif c == "exit":
+    elif "exit" in c.lower():
         messageToClient = exitsave.exit(command)
-    elif c == 'save':
+    elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
               
     else: 
