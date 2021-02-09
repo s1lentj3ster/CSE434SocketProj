@@ -8,6 +8,9 @@ def createList(reg):
         feedbackMessage = 'FAILURE.\nPLease enter sufficient parameters.\n Usage: create <new-list-name>'
         return feedbackMessage
     
+    if len(contactList) == 10:
+        feedbackMessage = 'FAILURE.\nMaximum contact lists created. Please try again later.\n'
+
     #set name to input
     name = reg[1]
 

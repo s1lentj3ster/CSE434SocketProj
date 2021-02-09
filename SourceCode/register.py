@@ -11,7 +11,10 @@ def info (reg):
     if len(reg) != 4:
         feedback += "FAILURE.\nPlease enter sufficient parameters.\nUsage: register <contact-name> <IP-address> <port>\n"
         return feedback
-    
+    if len(databaseSet) == 20:
+        feedback += 'FAILURE.\nRegister list is full. Please try again later.\n'
+        return feedback
+
     #Checks existing name
     if reg[1] in databaseSet:
         feedback += "FAILURE.\nName already exists\n"
