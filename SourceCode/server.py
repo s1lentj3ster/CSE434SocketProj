@@ -1,6 +1,7 @@
 import sys
 import os
 import string
+import socket
 from socket import *
 from string import *
 import register
@@ -25,13 +26,20 @@ if serverPort < 10000 or serverPort > 10499:
     exit(1)
 serverSocket.bind(('', serverPort))
 
+
+Server_Name = gethostname()
+Server_IP = gethostbyname(Server_Name + '.local')
+
 #Prints server address and message
-print ('IP address: '+ serverSocket.getsockname()[0])
-print ('I\'m ready <3 Send me something: ')
+print ('Connecting...\n')
+print('Servers IP address: ' + Server_IP)
+print('Server monitoring port ' + str(serverPort))
+
 messageToClient = ''
 
 
 while True:
+    print ('Awaiting instruction from a client...')
     #Receives client message, IP address and port number
     message, clientAddress = serverSocket.recvfrom(2048)
     
@@ -39,33 +47,36 @@ while True:
     command = list(message.decode('latin').split(" "))
 
     c = command[0]
-    if c == "register":
-        print("Registering " + command[1])
+    print(c.capitalize() + " process requested by client at IP " + str(clientAddress[0]))
+    if "register" in c.lower():
+        if len(command) > 3:        
+            print("Registering " + command[1])
         #Calls register and returns updated database with return message
-        messageToClient = register.info(command)
+            messageToClient = register.info(command)
+        else:
+            print('ERROR')
+            messageToClient = 'Register FAIL. Please enter sufficient parameters. \nUsage: register <contact-name> <IP-address> <port>\n'    
         
-    elif c == "create":
-        print('make contact')
+    elif c == "create":       
         messageToClient = create.createList(command)
 
-    elif c == "query-list":
-	#returnQuery = ''
+    elif c == "query-list":	
         messageToClient = query.query_list()
-        #serverSocket.sendto(returnQuery, clientAddress)
-
+       
     elif c == "join":
-        messageToClient = 'Join Me bruh '+joinleave.join(command)
+        messageToClient = joinleave.join(command)
 
     elif c == "leave":
-        messageToClient = 'Leaving list '+joinleave.leave(command)
+        messageToClient = joinleave.leave(command)
 
     elif c == "exit":
-        messageToClient = 'Exiting Everything' + exitsave.exit(command)
+        messageToClient = exitsave.exit(command)
     elif c == 'save':
-        messageToClient = 'Saving File ' + exitsave.save(command)
+        messageToClient = exitsave.save(command)
               
     else: 
-        messageToClient = 'IDK what you want, try again, bye'
+        messageToClient = 'INVALID COMMAND. Please try again'
+        print('ALERT! Invalid command ' + '"' + c.capitalize() + '" entered by Client at IP ' + str(clientAddress[0]))
 
     #Attach the address to encoded message and send into serverSocket 
     serverSocket.sendto(messageToClient.encode(), clientAddress)
