@@ -6,12 +6,12 @@ feedback = ''
 #contactcount = 0;
 #databasecount = 0;
 def exit(command):
-    if len(command) < 2:
-        feedback = 'FAILURE'
+    if len(command) != 2:
+        feedback = 'FAILURE.\n Please enter sufficient parameters\nUsage: exit <contact-name>\n'
         return feedback
     contact_name = command[1]
     if contact_name not in databaseSet:
-        feedback = '\nFAILURE. User not registered'
+        feedback = '\nFAILURE.\nUser not registered'
         return feedback
     #Removing from Contact Lists    
     for n in contactList:        
@@ -26,14 +26,14 @@ def exit(command):
             databaseSet.pop(contact_name)            
             print('Removed ' + contact_name + ' from registered user database')
 
-    feedback = 'SUCCESS'
+    feedback = 'SUCCESS.\n'+contact_name+' removed from database.\n'
     print('Removed from lists') #Sanity Check here. Can remove after testing
     return feedback
 
 def save(command):
     count = 0;
-    if len(command) < 2:
-        feedback = "FAILURE. Please enter file name"
+    if len(command) != 2:
+        feedback = "FAILURE.\nPlease enter sufficient parameters.\nUsage: save <file-name>\n"
         return feedback
     file_name = command[1]
     save_file = open(file_name, "w")
@@ -59,7 +59,7 @@ def save(command):
         save_file.write('\n')
     save_file.close()
     print('Save Success') #Placeholder for now
-    feedback = 'SUCCESS'
+    feedback = 'SUCCESS.\nFile saved successfully!'
     return feedback
 
     

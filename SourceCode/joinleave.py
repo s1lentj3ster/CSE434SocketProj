@@ -6,36 +6,37 @@ from utils import databaseSet
 
 feedback = ''
 def join (command):
-    #if len(command) != 2:
-    #    feedback = 'FAIL'
-    #    return feedback
+    if len(command) != 3:
+        feedback = 'FAIL.\nPlease enter sufficient parameters.\nUsage: join <contact-list-name> <contact-name>\n'
+        return feedback
     listName = command[1]
     contactName = command[2]
     
+    #check if name is registered, and list exists, but name does not exist in list yet
     if (contactName in databaseSet) and (listName in contactList)and not(contactName in contactList[listName]):
             
             #ok Im sure there is a more elegant way than this so please feel free to optimize it
             ip = databaseSet[contactName]["IP"]
             port = databaseSet[contactName]["port"]
             contactList[listName].update({contactName : { "IP" : ip, "port" : port}})
-            feedback = 'SUCCESS'
+            feedback = 'SUCCESS.\nYou have joined list '+listName+'\n'
     else:
-        feedback = 'FAIL'
+        feedback = 'FAIL.\nYou are not registered, or '+listName+' does not exist, or your name is already in '+ listName+'.\n'
     for name, contact in contactList.items():
         print(name , '\t' , contact , '\n')
     return feedback
 
 def leave (command):
     if len(command) != 3:
-        feedback = 'FAIL'
+        feedback = 'FAIL.\nPlease enter sufficient parameters.\nUsage: leave <contact-list-name> <contact-name>'
         return feedback
     listName = command[1]
     contactName = command[2]
-    if (listName in contactList) and (contactName in contactList[listName]):
+    if (listName in contactList) and (contactName in contactList[listName]) and (contactName in databaseSet):
         contactList[listName].pop(contactName)
-        feedback = 'SUCCESS'
+        feedback = 'SUCCESS.\nYou have successfully left '+listName+'\n'
     else:
-        feedback = 'FAIL'
+        feedback = 'FAIL.\nYou are not registered, or '+listName+' does not exist, or your name does not exist in this list.\n'
     for name, contact in contactList.items():
         print(name, contact)
     return feedback
