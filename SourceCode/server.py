@@ -15,7 +15,7 @@ from utils import contactList
 
 #Initialize new Dictionaries for Database
 
-#contactList = {}
+
 serverPort = int(sys.argv[1]) 
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 
@@ -61,19 +61,30 @@ while True:
         if len(command) > 1:
             messageToClient = create.createList(command)
         else:
-            print('Error: Create Failed <Work in Prog>')
+            print('Error: Create Failed by Client at IP ' + str(clientAddress[0]))
 
-    elif "query-list" in c.lower():	
+    elif "query-list" in c.lower():        
         messageToClient = query.query_list()
-       
+
     elif "join" in c.lower():
-        messageToClient = joinleave.join(command)
+        if len(command)>3:
+            print("Joining " + command[1])
+            messageToClient = joinleave.join(command)
+        else:
+            print('Error: Attempt to Join ' + command[1] + ' Failed by Client at IP ' + str(clientAddress[0]))
 
     elif "leave" in c.lower():
-        messageToClient = joinleave.leave(command)
+        if len(command)>3:
+            print("Registered User " + command[2] + ' requesting to leave ' + command[1] + ' list..')
+            messageToClient = joinleave.leave(command)
+        else:
+            print('Error: Attempt to Leave ' + command[1] + ' Failed')
 
     elif "exit" in c.lower():
-        messageToClient = exitsave.exit(command)
+        if len(command):
+            messageToClient = exitsave.exit(command)
+        else:
+            print('Error: Attempt to Exit Failed')
     elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
               
