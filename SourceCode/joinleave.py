@@ -18,16 +18,16 @@ def join (command):
             #ok Im sure there is a more elegant way than this so please feel free to optimize it
             ip = databaseSet[contactName]["IP"]
             port = databaseSet[contactName]["port"]
-            contactList[listName] = {}
-            contactList[listName]['User'] = contactName
-            contactList[listName][contactName] = {}
-            contactList[listName][contactName]['IP'] = ip #.update({contactName : { "IP" : ip, "port" : port}})
-            contactList[listName][contactName]['port'] = port
+            #contactList[listName] = {}
+            #contactList[listName][contactName] = {}
+            #contactList[listName][contactName] = {}
+            contactList[listName].update({contactName : { "IP" : ip, "port" : port}})
+            #contactList[listName][contactName]['port'] = port
             feedback = 'SUCCESS.\nYou have joined list '+listName+'\n'
     else:
         feedback = 'FAIL.\nYou are not registered, or '+listName+' does not exist, or your name is already in '+ listName+'.\n'
     for name, contact in contactList.items():
-        print(name , '\t' , contact , '\n')
+        print(name , contact , '\n')
     return feedback
 
 def leave (command):
