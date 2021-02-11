@@ -58,33 +58,23 @@ while True:
             messageToClient = 'Register FAIL. Please enter sufficient parameters. \nUsage: register <contact-name> <IP-address> <port>\n'    
         
     elif "create" in c.lower():
-        if len(command) > 1:
-            messageToClient = create.createList(command)
-        else:
-            print('Error: Create Failed by Client at IP ' + str(clientAddress[0]))
+        messageToClient = create.createList(command)
+        
 
     elif "query-list" in c.lower():        
         messageToClient = query.query_list()
 
-    elif "join" in c.lower():
-        if len(command)>3:
-            print("Joining " + command[1])
-            messageToClient = joinleave.join(command)
-        else:
-            print('Error: Attempt to Join ' + command[1] + ' Failed by Client at IP ' + str(clientAddress[0]))
+    elif "join" in c.lower():        
+        print("Joining " + command[1])
+        messageToClient = joinleave.join(command)        
 
     elif "leave" in c.lower():
-        if len(command)>3:
-            print("Registered User " + command[2] + ' requesting to leave ' + command[1] + ' list..')
-            messageToClient = joinleave.leave(command)
-        else:
-            print('Error: Attempt to Leave ' + command[1] + ' Failed')
+        print("Registered User " + command[2] + ' requesting to leave ' + command[1] + ' list..')
+        messageToClient = joinleave.leave(command)        
 
-    elif "exit" in c.lower():
-        if len(command):
-            messageToClient = exitsave.exit(command)
-        else:
-            print('Error: Attempt to Exit Failed')
+    elif "exit" in c.lower():        
+        messageToClient = exitsave.exit(command)
+        
     elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
               
@@ -94,5 +84,6 @@ while True:
 
     #Attach the address to encoded message and send into serverSocket 
     serverSocket.sendto(messageToClient.encode(), clientAddress)
+    messageToClient = ''
     
 
