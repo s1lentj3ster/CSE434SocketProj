@@ -19,6 +19,7 @@ def join (command):
             ip = databaseSet[contactName]["IP"]
             port = databaseSet[contactName]["port"]
             contactList[listName] = {}
+            contactList[listName]['User'] = contactName
             contactList[listName][contactName] = {}
             contactList[listName][contactName]['IP'] = ip #.update({contactName : { "IP" : ip, "port" : port}})
             contactList[listName][contactName]['port'] = port
