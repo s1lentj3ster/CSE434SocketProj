@@ -47,7 +47,7 @@ def save(command):
         save_file.write(contact + ' ' + databaseSet[contact]['IP'] + ' ' + databaseSet[contact]['port'] + '\n')
     save_file.write('\n\n')
     
-    for contact in databaseSet:
+    for contact in contactList:
         count += 1
     save_file.write(str(count) + '\n')
     count = 0
