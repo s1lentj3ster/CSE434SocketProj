@@ -7,7 +7,7 @@ def query_list ():
     feedback = ''
     
     for name, info in contactList.items():
-        feedback += name  + '\n' + str(contactList.get(name)) + '\n'
+        feedback += name  + '\n'
         code +=  1                
            
 
