@@ -26,7 +26,7 @@ def info (reg):
         return feedback
     
     #Checks valid port number
-    if 10000 >= reg[3] and reg[3] >= 10499:
+    if '9999' >= reg[3] and reg[3] >= '10499':
         feedback += 'FAILURE.\nPlease enter valid port number.\nUsage: 10000 <= <port> <= 10499 \n'
         return feedback
     
