@@ -77,7 +77,12 @@ while True:
         
     elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
-              
+
+    elif 'im-start' in c.lower():
+        print("IM START TODO")
+    
+    elif 'im-complete' in c.lower():
+        print("IM COMPLETE TODO")
     else: 
         messageToClient = 'INVALID COMMAND. Please try again'
         print('ALERT! Invalid command ' + '"' + c.capitalize() + '" entered by Client at IP ' + str(clientAddress[0]))
