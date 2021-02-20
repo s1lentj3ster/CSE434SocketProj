@@ -10,6 +10,7 @@ import utils
 import query
 import joinleave
 import exitsave
+import imstartcomp
 from utils import databaseSet
 from utils import contactList
 
@@ -32,6 +33,7 @@ Server_IP = gethostbyname(Server_Name + '.local')
 
 #Prints server address and message
 print ('Connecting...\n')
+print('Server Name: ' + Server_Name)
 print('Servers IP address: ' + Server_IP)
 print('Server monitoring port ' + str(serverPort))
 
