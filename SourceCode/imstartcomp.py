@@ -4,11 +4,13 @@ import utils
 from utils import contactList
 from utils import databaseSet
 
-feedback = ''
-count = 0
-imComplete = True
+
+
 
 def im_start(command):
+
+    feedback = ''
+    count = 0
     print("TODO")
     if len(command) != 3:
         feedback = 'FAIL. Please enter in sufficient parameters. Usage: im-start <contact-list-name> <contact-name>\n'
@@ -22,7 +24,11 @@ def im_start(command):
         feedback = 'FAIL. Contact List does not exist. Please create contact list ' + listName+ '\n'
         return feedback
     elif (listName in contactList) and (contactName in databaseSet):
-        feedback = 'Todo\n'
+        for contact in contactList[listName]:
+            count += 1
+        for contacts in contactList:
+            feedback += contacts +'\n'
+        feedback += str(count) + '\n'
         return feedback
     
     

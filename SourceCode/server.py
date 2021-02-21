@@ -55,6 +55,7 @@ while True:
             print("Registering " + command[1])
         #Calls register and returns updated database with return message
             messageToClient = register.info(command)
+        
         else:
             print('Error: Registration Failed by Client at IP ' + str(clientAddress[0]))
             messageToClient = 'Register FAIL. Please enter sufficient parameters. \nUsage: register <contact-name> <IP-address> <port>\n'    
@@ -81,7 +82,7 @@ while True:
         messageToClient = exitsave.save(command)
 
     elif 'im-start' in c.lower():
-        print("IM START TODO")
+        messageToClient = imstartcomp.im_start(command)
     
     elif 'im-complete' in c.lower():
         print("IM COMPLETE TODO")
