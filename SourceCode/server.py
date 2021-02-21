@@ -10,6 +10,7 @@ import utils
 import query
 import joinleave
 import exitsave
+import imstartcomp
 from utils import databaseSet
 from utils import contactList
 
@@ -32,6 +33,7 @@ Server_IP = gethostbyname(Server_Name + '.local')
 
 #Prints server address and message
 print ('Connecting...\n')
+print('Server Name: ' + Server_Name)
 print('Servers IP address: ' + Server_IP)
 print('Server monitoring port ' + str(serverPort))
 
@@ -53,6 +55,7 @@ while True:
             print("Registering " + command[1])
         #Calls register and returns updated database with return message
             messageToClient = register.info(command)
+        
         else:
             print('Error: Registration Failed by Client at IP ' + str(clientAddress[0]))
             messageToClient = 'Register FAIL. Please enter sufficient parameters. \nUsage: register <contact-name> <IP-address> <port>\n'    
@@ -77,7 +80,12 @@ while True:
         
     elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
-              
+
+    elif 'im-start' in c.lower():
+        messageToClient = imstartcomp.im_start(command)
+    
+    elif 'im-complete' in c.lower():
+        print("IM COMPLETE TODO")
     else: 
         messageToClient = 'INVALID COMMAND. Please try again'
         print('ALERT! Invalid command ' + '"' + c.capitalize() + '" entered by Client at IP ' + str(clientAddress[0]))
