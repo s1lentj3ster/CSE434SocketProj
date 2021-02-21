@@ -6,3 +6,6 @@ contactList = {}
     
 global databaseSet
 databaseSet = {}
+
+global inProcess
+inProcess = {}

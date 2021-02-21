@@ -1,6 +1,7 @@
 import utils
 from utils import contactList
 from utils import databaseSet
+from utils import inProcess
 
 feedback = ''
 #contactcount = 0;
@@ -13,6 +14,11 @@ def exit(command):
     if contact_name not in databaseSet:
         feedback = '\nFAILURE.\nUser not registered'
         return feedback
+        
+    for n in contactList:
+    	if contact_name in contactList[n] and contactList[n] in inProcess:
+    		feedback = "FAILURE. You cannot exit right now, IM is in process"
+    		return feedback
     #Removing from Contact Lists    
     for n in contactList:        
             if contact_name in contactList[n]:

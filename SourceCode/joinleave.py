@@ -3,6 +3,7 @@
 import utils
 from utils import contactList
 from utils import databaseSet
+from utils import inProcess
 
 feedback = ''
 def join (command):
@@ -24,8 +25,10 @@ def join (command):
             contactList[listName].update({contactName : { "IP" : ip, "port" : port}})
             #contactList[listName][contactName]['port'] = port
             feedback = 'SUCCESS.\nYou have joined list '+listName+'\n'
+    elif (listName in inProcess):
+    	feedback = 'FAILURE.\nYou cannot join right now, an IM is in process.\n'
     else:
-        feedback = 'FAIL.\nYou are not registered, or '+listName+' does not exist, or your name is already in '+ listName+'.\n'
+        feedback = 'FAILURE.\nYou are not registered, or '+listName+' does not exist, or your name is already in '+ listName+'.\n'
     for name, contact in contactList.items():
         print(name , contact , '\n')
     return feedback
@@ -39,6 +42,8 @@ def leave (command):
     if (listName in contactList) and (contactName in contactList[listName]) and (contactName in databaseSet):
         contactList[listName].pop(contactName)
         feedback = 'SUCCESS.\nYou have successfully left '+listName+'\n'
+    elif (listName in Process):
+    	feedback = 'FAILURE.\nYou cannot leave right now, an IM is in process.\n'
     else:
         feedback = 'FAIL.\nYou are not registered, or '+listName+' does not exist, or your name does not exist in this list.\n'
     for name, contact in contactList.items():
