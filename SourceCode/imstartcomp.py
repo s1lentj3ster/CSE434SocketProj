@@ -16,10 +16,10 @@ def im_start(command):
     listName = command[1]
     contactName = command[2]
     if (contactName not in databaseSet):
-        feedback = 'FAIL. Contact not registered with server. Please run the register command.\n'
+        feedback = 'FAILURE.\n Contact not registered with server. Please run the register command.\n'
         return feedback
     if (listName not in contactList):
-        feedback = 'FAIL. Contact List does not exist. Please create contact list ' + listName+ '\n'
+        feedback = 'FAILURE.\n Contact List does not exist. Please create contact list ' + listName+ '\n'
         return feedback
     elif (listName in contactList) and (contactName in databaseSet):
     	inProcess = {contactList : listName}
@@ -47,7 +47,7 @@ def im_complete(command):
         feedback = 'FAILURE.\nContact List does not exist. Please create contact list ' + listName+ '\n'
     if listName not in inProcess:
     	feedback = 'FAILURE.\nContact List is not engaging in an IM right now.\n'
-    else
+    else:
     	inProcess.pop(contactList, listName)
     	feedback = 'SUCCESS.\nIM completed.\n' 
     return feedback
