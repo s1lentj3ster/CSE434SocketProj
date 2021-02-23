@@ -38,7 +38,7 @@ print('Servers IP address: ' + Server_IP)
 print('Server monitoring port ' + str(serverPort))
 
 messageToClient = ''
-
+block_comms = False
 
 while True:
     print ('Awaiting instruction from a client...')
@@ -67,25 +67,34 @@ while True:
     elif "query-list" in c.lower():        
         messageToClient = query.query_list()
 
-    elif "join" in c.lower():        
-        print("Joining " + command[1])
-        messageToClient = joinleave.join(command)        
+    elif "join" in c.lower():
+        if block_comms != True:        
+            print("Joining " + command[1])
+            messageToClient = joinleave.join(command)
+        else:
+            messageToClient = 'Cannot join ' + command[1] + ' while IM in Progress\n'        
 
     elif "leave" in c.lower():
-        print("Registered User " + command[2] + ' requesting to leave ' + command[1] + ' list..')
-        messageToClient = joinleave.leave(command)        
-
-    elif "exit" in c.lower():        
-        messageToClient = exitsave.exit(command)
-        
+        if block_comms != True: 
+            print("Registered User " + command[2] + ' requesting to leave ' + command[1] + ' list..')
+            messageToClient = joinleave.leave(command)        
+        else:
+            messageToClient = 'Cannot leave ' + command[1] + ' while IM in Progress\n' 
+    elif "exit" in c.lower():
+        if block_comms != True:         
+            messageToClient = exitsave.exit(command)
+        else:
+            messageToClient = 'Cannot exit while IM in progress\n' 
     elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
 
     elif 'im-start' in c.lower():
         messageToClient = imstartcomp.im_start(command)
+        block_comms = True
     
     elif 'im-complete' in c.lower():
-        print("IM COMPLETE TODO")
+        print("Done\n")
+        block_comms = False
     else: 
         messageToClient = 'INVALID COMMAND. Please try again'
         print('ALERT! Invalid command ' + '"' + c.capitalize() + '" entered by Client at IP ' + str(clientAddress[0]))
