@@ -22,6 +22,16 @@ while True:
 	
     #Encodes message, attaches destination address and send into clientSocket
     clientSocket.sendto(message.encode(), (serverName, serverPort))
+    if 'im-start' in message:
+          print('Starting IM. Please wait for Server\n')
+          #Need to change PORT and client Socket to other IP's/Ports.
+          #Need to have Server send a "Start IM" to the other machines on the list. That could trigger them switching over to 
+          #receive from the other client...
+          #something to the effect of: if 'im-start': temp-port = serverPort; serverPort = 10300, temp-server = serverName; serverName = next client's IP; 
+          #client.Socket.sendto(message.encode(), (serverName,serverPort)
+          #send the list and message to the next client and repeat?
+          #If perhaps a while loop where if im-compter not in messag, run until im-complete sent/received. Everything swaps back
+          #what a pain in the....
 
     #Receives message and address back from server, buffer size 2048
     sendMessage, serverAddress = clientSocket.recvfrom(2048)
