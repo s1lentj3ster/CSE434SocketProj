@@ -92,6 +92,7 @@ while True:
     elif 'im-start' in c.lower():
         messageToClient = imstartcomp.im_start(command)
         block_comms = True
+        messageToClient += 'initiate-im\n' #honestly don't know if this will work...
     
     elif 'im-complete' in c.lower():
         print("Done\n")
