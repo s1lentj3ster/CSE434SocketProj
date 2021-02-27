@@ -1,5 +1,6 @@
 import sys
 import os
+import thread
 import string
 import socket
 import peer
@@ -18,20 +19,25 @@ if serverPort < 10000 or serverPort > 10499:
 
 print('You have been connected to ' + serverName)
 while True:
-    message = raw_input('Enter Command: ') #Send prompt to client
-	
+    #sendMessage, serverAddress = clientSocket.recvfrom(2048)
+    try:
+      sendMessage, serverAddress = clientSocket.recvfrom(2048)
+    if 'im-start' not in sendMessage:
+      message = raw_input('Enter Command: ') #Send prompt to client
+      clientSocket.sendto(message.encode(), (serverName, serverPort))
+	  
     #Encodes message, attaches destination address and send into clientSocket
-    clientSocket.sendto(message.encode(), (serverName, serverPort))
+      
     if 'im-start' in message:
-          sendMessage, serverAddress = clientSocket.recvfrom(2048)
-          print('Starting IM. Please wait for Server\n')
-          clientPort = int(10220)
-          client_Host = gethostname()
-          client_IP = gethostbyname(client_Host + '.local')
-
-          im_Message = raw_input('Enter IM: ') #IM Message to send to other devices. 
-          print(client_Host) #Sanity Check
-          print(client_IP) #Sanity Check
+         # sendMessage, serverAddress = clientSocket.recvfrom(2048)
+      print('Starting IM. Please wait for Server\n')
+         # clientPort = int(10220)
+         # client_Host = gethostname()
+          #client_IP = gethostbyname(client_Host + '.local')
+#
+         #im_Message = raw_input('Enter IM: ') #IM Message to send to other devices. 
+          #print(client_Host) #Sanity Check
+          #print(client_IP) #Sanity Check
           #Need to change PORT and client Socket to other IP's/Ports.
           #Need to have Server send a "Start IM" to the other machines on the list. That could trigger them switching over to 
           #receive from the other client...
