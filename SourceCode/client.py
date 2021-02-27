@@ -1,9 +1,10 @@
 import sys
 import os
-import thread
+import threading
 import string
 import socket
 import peer
+from _thread import *
 from socket import *
 from string import *
 
@@ -31,21 +32,7 @@ while True:
     if 'im-start' in message:
          # sendMessage, serverAddress = clientSocket.recvfrom(2048)
       print('Starting IM. Please wait for Server\n')
-         # clientPort = int(10220)
-         # client_Host = gethostname()
-          #client_IP = gethostbyname(client_Host + '.local')
-#
-         #im_Message = raw_input('Enter IM: ') #IM Message to send to other devices. 
-          #print(client_Host) #Sanity Check
-          #print(client_IP) #Sanity Check
-          #Need to change PORT and client Socket to other IP's/Ports.
-          #Need to have Server send a "Start IM" to the other machines on the list. That could trigger them switching over to 
-          #receive from the other client...
-          #something to the effect of: if 'im-start': temp-port = serverPort; serverPort = 10300, temp-server = serverName; serverName = next client's IP; 
-          #client.Socket.sendto(message.encode(), (serverName,serverPort)
-          #send the list and message to the next client and repeat?
-          #If perhaps a while loop where if im-compter not in messag, run until im-complete sent/received. Everything swaps back
-          #what a pain in the....
+         
 
     #Receives message and address back from server, buffer size 2048
     sendMessage, serverAddress = clientSocket.recvfrom(2048)
