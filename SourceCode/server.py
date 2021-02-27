@@ -46,6 +46,7 @@ block_comms = False
 
 while True:
     print ('Awaiting instruction from a client...')
+    
     #Receives client message, IP address and port number
     message, clientAddress = serverSocket.recvfrom(2048)
     
