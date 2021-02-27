@@ -22,7 +22,7 @@ def im_start(command):
         feedback = 'FAILURE.\n Contact List does not exist. Please create contact list ' + listName+ '\n'
         return feedback
     elif (listName in contactList) and (contactName in databaseSet):
-    	inProcess = {contactList : listName}
+    	#inProcess = {contactList : listName}
         feedback += listName + '\n'
         feedback += str(len(contactList[listName])) +'\n'
         for contactName, detail in contactList[listName].items():

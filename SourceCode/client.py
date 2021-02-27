@@ -3,8 +3,8 @@ import os
 import threading
 import string
 import socket
-import peer
-from _thread import *
+import time
+from threading import *
 from socket import *
 from string import *
 
@@ -13,25 +13,35 @@ serverPort = int(sys.argv[2]) #Server's port number
 clientSocket = socket (AF_INET, SOCK_DGRAM) #Creates client's socket
 port = raw_input('Enter your port: ')
 clientSocket.bind(('',int(port))) 
+chat_Socket = socket(AF_INET, SOCK_DGRAM)
+chat_Socket.bind(('',int(10005)))
+
+def message_thread():    
+    while True:
+          try:
+            test_message, serverAdd = chat_Socket.recvfrom(2048)
+            print("Incomming: " + test_message)
+            message = ''
+          except OSError:
+            break
 
 if serverPort < 10000 or serverPort > 10499:
     print('Please use port between 10000 and 10499\n')
     exit(1)
-
+thread_message = Thread(target =message_thread)
+thread_message.start()
 print('You have been connected to ' + serverName)
 while True:
     #sendMessage, serverAddress = clientSocket.recvfrom(2048)
-    try:
-      sendMessage, serverAddress = clientSocket.recvfrom(2048)
-    if 'im-start' not in sendMessage:
-      message = raw_input('Enter Command: ') #Send prompt to client
-      clientSocket.sendto(message.encode(), (serverName, serverPort))
+   
+  message = raw_input('Enter Command: \n') #Send prompt to client
+  clientSocket.sendto(message.encode(), (serverName, serverPort))
 	  
     #Encodes message, attaches destination address and send into clientSocket
       
-    if 'im-start' in message:
-         # sendMessage, serverAddress = clientSocket.recvfrom(2048)
-      print('Starting IM. Please wait for Server\n')
+  if 'im-start' in message:
+    # sendMessage, serverAddress = clientSocket.recvfrom(2048)
+    print('Starting IM. Please wait for Server\n')
          
 
     #Receives message and address back from server, buffer size 2048
@@ -44,7 +54,9 @@ while True:
 		#only exit with success
     if 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
         clientSocket.close()
-        exit(1)
-
+        thread_message.daemon = True       
+        sys.exit()
+  #sendMessage, serverAddress = clientSocket.recvfrom(2048)
+  print (sendMessage.decode())
 #Closes the socket and terminates the process
 #clientSocket.close()

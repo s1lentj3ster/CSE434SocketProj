@@ -4,9 +4,11 @@ import string
 import threading
 import socket
 import subprocess
+import time
 from socket import *
 from string import *
-from _thread import *
+import threading
+from threading import *
 import register
 import create
 import utils
@@ -24,13 +26,24 @@ from utils import contactList
 serverPort = int(sys.argv[1]) 
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 
-
+serverSocket_2 = socket(AF_INET, SOCK_DGRAM)
+serverSocket_2.bind(('',10005))
 #Assigns port to the server's socket
 if serverPort < 10000 or serverPort > 10499:
     print("Please enter in a port number between 10000 to 10499\n")
     exit(1)
 serverSocket.bind(('', serverPort))
 
+def multithread_server(client_stuff, clients_message):
+    message_test = str(clients_message)
+    listen_system_ip = str(client_stuff)
+    listen_system_port = 10005
+    listen_system = (listen_system_ip, listen_system_port)
+    serverSocket_2.sendto(message_test, listen_system)
+    return
+    
+    
+    
 
 Server_Name = gethostname()
 Server_IP = gethostbyname(Server_Name + '.local')
@@ -47,12 +60,16 @@ block_comms = False
 while True:
     print ('Awaiting instruction from a client...')
     
+    
     #Receives client message, IP address and port number
     message, clientAddress = serverSocket.recvfrom(2048)
     
+    
     #Processes client's requests and splits into a list of keywords
     command = list(message.decode('latin').split(" "))
-
+    
+   
+   
     c = command[0]
     print(c.capitalize() + " process requested by client at IP " + str(clientAddress[0]))
     if "register" in c.lower():
@@ -97,6 +114,9 @@ while True:
         messageToClient = imstartcomp.im_start(command)
         block_comms = True
         messageToClient += 'initiate-im\n' #honestly don't know if this will work...
+        im_message = 'Oh ok, its messaging time\n'
+        t1 = threading.Thread(target=multithread_server('192.168.10.102', im_message))
+        t1.start()
     
     elif 'im-complete' in c.lower():
         print("Done\n")
@@ -108,5 +128,6 @@ while True:
     #Attach the address to encoded message and send into serverSocket 
     serverSocket.sendto(messageToClient.encode(), clientAddress)
     messageToClient = ''
+    
     
 
