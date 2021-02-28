@@ -76,7 +76,7 @@ while True:
           
     #Decodes and print receiving message 
     if ('im-start' not in message):
-    	print ('test')#sendMessage.decode())
+      print ('test')#sendMessage.decode())
     else: #If the im-start is success, get name and list from command, decodes message to dict
     	if 'FAILURE' not in sendMessage.decode():
     		command = message.split(" ")
