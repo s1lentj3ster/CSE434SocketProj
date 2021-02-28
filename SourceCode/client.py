@@ -25,6 +25,11 @@ def message_thread():
           except OSError:
             break
 
+def send_message():
+      while True:
+          try:
+            print('TODO')
+
 if serverPort < 10000 or serverPort > 10499:
     print('Please use port between 10000 and 10499\n')
     exit(1)

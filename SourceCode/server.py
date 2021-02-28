@@ -43,7 +43,6 @@ def multithread_server(client_stuff, clients_message):
     return
     
     
-    
 
 Server_Name = gethostname()
 Server_IP = gethostbyname(Server_Name + '.local')
