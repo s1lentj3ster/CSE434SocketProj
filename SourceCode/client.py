@@ -16,12 +16,14 @@ clientSocket.bind(('',int(port)))
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
 chat_Socket.bind(('',int(10005)))
 
-def message_thread():    
+#clients listening to port 10005 on another thread
+def client_listening():    
     while True:
           try:
             test_message, serverAdd = chat_Socket.recvfrom(2048)
             print("Incomming: " + test_message)
             message = ''
+
           except OSError:
             break
 
@@ -30,10 +32,16 @@ def send_message():
           try:
             print('TODO')
 
+def list_contacts(contact_list, iteration):
+    print("list TODO\n")
+
+
+#Recieve list and send message to next person. Will need to extract next name. Set User Variable and if equal, skip, move to next person
+
 if serverPort < 10000 or serverPort > 10499:
     print('Please use port between 10000 and 10499\n')
     exit(1)
-thread_message = Thread(target =message_thread)
+thread_message = Thread(target =client_listening)
 thread_message.start()
 print('You have been connected to ' + serverName)
 while True:
@@ -59,7 +67,7 @@ while True:
 		#only exit with success
     if 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
         clientSocket.close()
-        thread_message.daemon = True       
+        client_listening.daemon = True       
         sys.exit()
   #sendMessage, serverAddress = clientSocket.recvfrom(2048)
   print (sendMessage.decode())

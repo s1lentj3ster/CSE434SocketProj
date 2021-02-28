@@ -27,12 +27,14 @@ serverPort = int(sys.argv[1])
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 
 serverSocket_2 = socket(AF_INET, SOCK_DGRAM)
-serverSocket_2.bind(('',10005))
+serverSocket_2.bind(('',10005))#4Client Send port?
 #Assigns port to the server's socket
 if serverPort < 10000 or serverPort > 10499:
     print("Please enter in a port number between 10000 to 10499\n")
     exit(1)
 serverSocket.bind(('', serverPort))
+
+
 
 def multithread_server(client_stuff, clients_message):
     message_test = str(clients_message)
@@ -42,7 +44,7 @@ def multithread_server(client_stuff, clients_message):
     serverSocket_2.sendto(message_test, listen_system)
     return
     
-    
+
 
 Server_Name = gethostname()
 Server_IP = gethostbyname(Server_Name + '.local')

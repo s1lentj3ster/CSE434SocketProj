@@ -29,7 +29,7 @@ def im_start(command):
             feedback += contactName + '\t'
             for key in detail: 
         	feedback += str(detail[key]) +'\t'
-            feedback += '\n'	
+            feedback += contactList + '\n'	
         return feedback
 
 def im_complete(command):
