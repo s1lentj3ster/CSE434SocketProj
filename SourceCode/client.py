@@ -4,6 +4,7 @@ import threading
 import string
 import socket
 import time
+import pickle
 from threading import *
 from socket import *
 from string import *
@@ -11,46 +12,54 @@ from string import *
 serverName = sys.argv[1] #<--- Server IP address here 
 serverPort = int(sys.argv[2]) #Server's port number
 clientSocket = socket (AF_INET, SOCK_DGRAM) #Creates client's socket
-port = raw_input('Enter your port: ')
-clientSocket.bind(('',int(port))) 
+#port = raw_input('Enter your port: ')
+clientSocket.bind(('',serverPort)) #Use Server port as this provides communication from client to server Port 10000 
+
+#Use Port 10005 for communication Client to Client (Peer to Peer)
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
 chat_Socket.bind(('',int(10005)))
 
-#clients listening to port 10005 on another thread
-def client_listening():    
-def rotate_values(my_dict): #rotate dict value, doesnt work 100% 
+#clients listening to port 10005 on another thread//Not sure this is needed...?
+def client_listening():
+  print('Something here to prevent error\n')
+
+
+def rotate_values(my_dict): #rotate dict value, doesnt work 100% (Is this going to be called in "Send_Message" ? )
     # no need to cast the keys to list
     values_deque = deque(my_dict.values())
     values_deque.rotate(1)
     return dict(zip(my_dict.keys(), values_deque))
     
-def message_thread():    
+def message_thread():    #Client Listening for incomming messages. 
     while True:
           try:
             test_message, serverAdd = chat_Socket.recvfrom(2048)
-            print("Incomming: " + test_message)
+            print("Incomming: " + test_message) 
             message = ''
 
           except OSError:
             break
 
-def send_message():
+def send_message(sendto_Host, listIP): #Send message from one client to another?
       while True:
           try:
-            print('TODO')
+            print('TODO')            
+            clientName = '192.168.10.102' #arbitrary, will need to be filled in by arguement "Sendto_Host" 
+            message = "message here " + listIP #dict that was passed from rotate_values definition
+            chat_Socket.sendto(message.encode(), (clientName, int(10005))) #Will need to 
           except: 
             break
 
 if (serverPort < 10000 or serverPort > 10499):
     print('Please use port between 10000 and 10499\n')
     exit(1)
-thread_message = Thread(target =client_listening)
+thread_message = Thread(target = message_thread)
 thread_message.start()
 print('You have been connected to ' + serverName)
 while True:
     #sendMessage, serverAddress = clientSocket.recvfrom(2048)
    
-  message = raw_input('Enter Command: \n') #Send prompt to client
+  message = raw_input('Enter Command: \n') #Send prompt to client #new line added to prevent issues with input
   clientSocket.sendto(message.encode(), (serverName, serverPort))
 	  
     #Encodes message, attaches destination address and send into clientSocket
