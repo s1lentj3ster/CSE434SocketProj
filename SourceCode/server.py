@@ -120,6 +120,7 @@ while True:
         t1.start()
     
     elif 'im-complete' in c.lower():
+    	messageToClient = imstartcomp.im_complete(command)
         print("Done\n")
         block_comms = False
     else: 

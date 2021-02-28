@@ -8,4 +8,4 @@ global databaseSet
 databaseSet = {}
 
 global inProcess
-inProcess = {}
+inProcess = list()
