@@ -15,9 +15,10 @@ def exit(command):
         feedback = '\nFAILURE.\nUser not registered'
         return feedback
         
-    for n in contactList:
-    	if contact_name in contactList[n] and contactList[n] in inProcess:
-    		feedback = "FAILURE. You cannot exit right now, IM is in process"
+    for listName, contact in contactList.items():
+    	for name, info in contact.items():
+    	    if (name == contact_name) and (listName in inProcess):
+    		feedback = "FAILURE.\nYou cannot exit right now, IM is in process"
     		return feedback
     #Removing from Contact Lists    
     for n in contactList:        
@@ -25,7 +26,6 @@ def exit(command):
                 contactList[n].pop(contact_name)
                 #contactcount = contactcount + 1
                 print('Removed ' + contact_name + ' from Contact lists')
-
    
     #Removing from Registered User Database
     if contact_name in databaseSet:

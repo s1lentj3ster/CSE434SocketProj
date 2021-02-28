@@ -16,6 +16,12 @@ clientSocket.bind(('',int(port)))
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
 chat_Socket.bind(('',int(10005)))
 
+def rotate_values(my_dict): #rotate dict value, doesnt work 100% 
+    # no need to cast the keys to list
+    values_deque = deque(my_dict.values())
+    values_deque.rotate(1)
+    return dict(zip(my_dict.keys(), values_deque))
+    
 def message_thread():    
     while True:
           try:
@@ -29,8 +35,10 @@ def send_message():
       while True:
           try:
             print('TODO')
+          except: 
+            break
 
-if serverPort < 10000 or serverPort > 10499:
+if (serverPort < 10000 or serverPort > 10499):
     print('Please use port between 10000 and 10499\n')
     exit(1)
 thread_message = Thread(target =message_thread)
@@ -55,7 +63,19 @@ while True:
           print("Host " + 'TODO' + 'initiated instant message with list')
           
     #Decodes and print receiving message 
-    print (sendMessage.decode())
+    if ('im-start' not in message):
+    	print (sendMessage.decode())
+    else: #If the im-start is success, get name and list from command, decodes message to dict
+    	if 'FAILURE' not in sendMessage.decode():
+    		command = message.split(" ")
+    		contact = command[1]
+    		name = command[2]
+    		contactList = pickle.loads(sendMessage.decode('base64', 'strict'))  
+    		print(contactList)
+    		contactList = rotate_values(contactList)
+    		print(contactList)
+    	else: 
+    		print(sendMessage.decode())
 		#only exit with success
     if 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
         clientSocket.close()
