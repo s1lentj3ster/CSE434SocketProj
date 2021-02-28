@@ -76,7 +76,7 @@ while True:
           
     #Decodes and print receiving message 
     if ('im-start' not in message):
-    	print (sendMessage.decode())
+    	print ('test')#sendMessage.decode())
     else: #If the im-start is success, get name and list from command, decodes message to dict
     	if 'FAILURE' not in sendMessage.decode():
     		command = message.split(" ")
@@ -86,14 +86,15 @@ while True:
     		print(contactList)
     		contactList = rotate_values(contactList)
     		print(contactList)
-    	else: 
-    		print(sendMessage.decode())
+    	#else: 
+    		#print('Test')#sendMessage.decode()) <------ Causing duplicate messages on Client
 		#only exit with success
-    if 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
-        clientSocket.close()
-        client_listening.daemon = True       
-        sys.exit()
-  #sendMessage, serverAddress = clientSocket.recvfrom(2048)
-  print (sendMessage.decode())
+  elif 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
+    clientSocket.close()
+    client_listening.daemon = True       
+    sys.exit()
+  else:
+    sendMessage, serverAddress = clientSocket.recvfrom(2048)
+    print (sendMessage.decode())
 #Closes the socket and terminates the process
 #clientSocket.close()
