@@ -106,10 +106,9 @@ while True:
 		#only exit with success
   elif 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
     clientSocket.close()
-    #thread_message.daemon = True 
-    #message_process.daemon = True  
-    os.kill(message_process, signal.SIGSTOP)   
+    message_process.terminate()
     sys.exit()
+    #os._exit(1)
   else:
     sendMessage, serverAddress = clientSocket.recvfrom(2048)
     print (sendMessage.decode())
