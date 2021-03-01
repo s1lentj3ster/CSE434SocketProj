@@ -5,6 +5,7 @@ import string
 import socket
 import time
 import pickle
+from collections import deque
 from threading import *
 from socket import *
 from string import *
@@ -24,11 +25,13 @@ def client_listening():
   print('Something here to prevent error\n')
 
 
-def rotate_values(my_dict): #rotate dict value, doesnt work 100% (Is this going to be called in "Send_Message" ? )
+def rotate_values(my_dict): #rotate dict values (Is this going to be called in "Send_Message" ? )
     # no need to cast the keys to list
-    values_deque = deque(my_dict.values())
+    values_deque = deque(my_dict.values())#rotate values
+    keys_deque = deque(my_dict.keys())#rotate keys
     values_deque.rotate(1)
-    return dict(zip(my_dict.keys(), values_deque))
+    keys_deque.rotate(1)
+    return dict(zip(keys_deque, values_deque))
     
 def message_thread():    #Client Listening for incomming messages. 
     while True:
