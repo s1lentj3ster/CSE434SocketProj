@@ -14,7 +14,7 @@ serverName = sys.argv[1] #<--- Server IP address here
 serverPort = int(sys.argv[2]) #Server's port number
 clientSocket = socket (AF_INET, SOCK_DGRAM) #Creates client's socket
 #port = raw_input('Enter your port: ')
-clientSocket.bind(('',serverPort)) #Use Server port as this provides communication from client to server Port 10000 
+#clientSocket.bind(('',serverPort)) #Use Server port as this provides communication from client to server Port 10000 
 
 #Use Port 10005 for communication Client to Client (Peer to Peer)
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
@@ -24,7 +24,14 @@ chat_Socket.bind(('',int(10005)))
 def client_listening():
   print('Something here to prevent error\n')
 
-
+def print_list(feedback):
+    feedback += str(len(contactList[listName])) +'\n'
+    for contactName, detail in contactList[listName].items():
+        feedback += contactName + '\t'
+        for key in detail: 
+    		feedback += str(detail[key]) +'\t'
+        	feedback += '\n'
+        
 def rotate_values(my_dict): #rotate dict values (Is this going to be called in "Send_Message" ? )
     # no need to cast the keys to list
     values_deque = deque(my_dict.values())#rotate values
@@ -87,10 +94,11 @@ while True:
     		name = command[2]
     		contactList = pickle.loads(sendMessage.decode('base64', 'strict'))  
     		print(contactList)
-    		contactList = rotate_values(contactList)
-    		print(contactList)
-    	#else: 
-    		#print('Test')#sendMessage.decode()) <------ Causing duplicate messages on Client
+    		while (list(contactList.keys())[0] != name):
+    			contactList = rotate_values(contactList)
+    		print_list(contactList)
+    	else: 
+    		print(sendMessage.decode()) #<------ Causing duplicate messages on Client
 		#only exit with success
   elif 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
     clientSocket.close()
