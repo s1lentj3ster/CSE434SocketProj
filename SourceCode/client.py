@@ -24,7 +24,8 @@ chat_Socket.bind(('',int(10005)))
 def client_listening():
   print('Something here to prevent error\n')
 
-def print_list(feedback):
+def print_list(listName):
+    feedback = ''
     feedback += str(len(contactList[listName])) +'\n'
     for contactName, detail in contactList[listName].items():
         feedback += contactName + '\t'
