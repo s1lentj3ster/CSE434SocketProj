@@ -1,12 +1,13 @@
 import sys
 import os
-import threading
+import signal
+import multiprocessing
 import string
 import socket
 import time
 import pickle
 from collections import deque
-from threading import *
+from multiprocessing import *
 from socket import *
 from string import *
 
@@ -66,8 +67,8 @@ def send_message(sendto_Host, listIP): #Send message from one client to another?
 if (serverPort < 10000 or serverPort > 10499):
     print('Please use port between 10000 and 10499\n')
     exit(1)
-thread_message = Thread(target = message_thread)
-thread_message.start()
+message_process = multiprocessing.Process(target = message_thread)
+message_process.start()
 print('You have been connected to ' + serverName)
 while True:
     #sendMessage, serverAddress = clientSocket.recvfrom(2048)
@@ -105,7 +106,9 @@ while True:
 		#only exit with success
   elif 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
     clientSocket.close()
-    thread_message.daemon = True       
+    #thread_message.daemon = True 
+    #message_process.daemon = True  
+    os.kill(message_process, signal.SIGSTOP)   
     sys.exit()
   else:
     sendMessage, serverAddress = clientSocket.recvfrom(2048)

@@ -1,14 +1,13 @@
 import sys
 import os
 import string
-import threading
 import socket
 import subprocess
 import time
 from socket import *
 from string import *
-import threading
-from threading import *
+import multiprocessing
+from multiprocessing import *
 import register
 import create
 import utils
@@ -116,8 +115,8 @@ while True:
         block_comms = True
         messageToClient += 'initiate-im\n' #honestly don't know if this will work...
         im_message = 'Oh ok, its messaging time\n'
-        t1 = threading.Thread(target=multithread_server('192.168.10.102', im_message))
-        t1.start()
+        p1 = multiprocessing.Process(target=multithread_server('192.168.10.102', im_message))
+        p1.start()
     
     elif 'im-complete' in c.lower():
     	messageToClient = imstartcomp.im_complete(command)
