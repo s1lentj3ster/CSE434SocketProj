@@ -26,8 +26,8 @@ def client_listening():
 
 def print_list(listName):
     feedback = ''
-    feedback += str(len(contactList[listName])) +'\n'
-    for contactName, detail in contactList[listName].items():
+    feedback += str(len(listName)) +'\n'
+    for contactName, detail in listName.items():
         feedback += contactName + '\t'
         for key in detail: 
     		feedback += str(detail[key]) +'\t'
