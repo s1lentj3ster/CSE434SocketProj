@@ -32,13 +32,7 @@ def im_start(command):
     if (listName in contactList) and (contactName in databaseSet):
     	inProcess.append(listName)
     	print(inProcess)
-    	feedback = pickle.dumps(contactList[listName]).encode('base64', 'strict')
-        #feedback += str(len(contactList[listName])) +'\n'
-        #for contactName, detail in contactList[listName].items():
-        #    feedback += contactName + '\t'
-        #    for key in detail: 
-        #	feedback += str(detail[key]) +'\t'
-        #    feedback += '\n'	
+    	feedback = pickle.dumps(contactList[listName]).encode('base64', 'strict')	
         return feedback
 
 def im_complete(command):
