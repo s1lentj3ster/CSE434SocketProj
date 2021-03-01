@@ -33,6 +33,7 @@ def print_list(listName):
     		feedback += str(detail[key]) +'\t'
         	feedback += '\n'
     print(feedback)
+    return
         
 def rotate_values(my_dict): #rotate dict values (Is this going to be called in "Send_Message" ? )
     # no need to cast the keys to list
@@ -96,15 +97,15 @@ while True:
     		name = command[2]
     		contactList = pickle.loads(sendMessage.decode('base64', 'strict'))  
     		print(contactList)
-    		while (list(contactList.keys())[0] != name):
-    			contactList = rotate_values(contactList)
+    		#while (list(contactList.keys())[0] != name):
+    			#contactList = rotate_values(contactList)
     		print_list(contactList)
     	else: 
     		print(sendMessage.decode()) #<------ Causing duplicate messages on Client
 		#only exit with success
   elif 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
     clientSocket.close()
-    client_listening.daemon = True       
+    thread_message.daemon = True       
     sys.exit()
   else:
     sendMessage, serverAddress = clientSocket.recvfrom(2048)
