@@ -32,6 +32,7 @@ def print_list(listName):
         for key in detail: 
     		feedback += str(detail[key]) +'\t'
         	feedback += '\n'
+    print(feedback)
         
 def rotate_values(my_dict): #rotate dict values (Is this going to be called in "Send_Message" ? )
     # no need to cast the keys to list
