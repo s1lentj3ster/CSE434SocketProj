@@ -6,8 +6,9 @@ import string
 import socket
 import time
 import pickle
-from collections import deque
 from multiprocessing import *
+from collections import OrderedDict
+from collections import deque
 from socket import *
 from string import *
 
@@ -19,7 +20,7 @@ clientSocket = socket (AF_INET, SOCK_DGRAM) #Creates client's socket
 
 #Use Port 10005 for communication Client to Client (Peer to Peer)
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
-chat_Socket.bind(('',int(10005)))
+chat_Socket.bind(('',int(10006)))
 
 #clients listening to port 10005 on another thread//Not sure this is needed...?
 def client_listening():
@@ -32,17 +33,16 @@ def print_list(listName):
         feedback += contactName + '\t'
         for key in detail: 
     		feedback += str(detail[key]) +'\t'
-        	feedback += '\n'
+        feedback += '\n'
     print(feedback)
     return
         
 def rotate_values(my_dict): #rotate dict values (Is this going to be called in "Send_Message" ? )
-    # no need to cast the keys to list
-    values_deque = deque(my_dict.values())#rotate values
-    keys_deque = deque(my_dict.keys())#rotate keys
-    values_deque.rotate(1)
-    keys_deque.rotate(1)
-    return dict(zip(keys_deque, values_deque))
+    values_deque = deque(my_dict.values())
+    keys_deque = deque(my_dict.keys())
+    values_deque.rotate(-1)
+    keys_deque.rotate(-1)
+    return OrderedDict(zip(keys_deque, values_deque))
     
 def message_thread():    #Client Listening for incomming messages. 
     while True:
@@ -96,11 +96,16 @@ while True:
     		command = message.split(" ")
     		contact = command[1]
     		name = command[2]
-    		contactList = pickle.loads(sendMessage.decode('base64', 'strict'))  
-    		print(contactList)
-    		#while (list(contactList.keys())[0] != name):
-    			#contactList = rotate_values(contactList)
+    		contactList = OrderedDict(pickle.loads(sendMessage.decode('base64', 'strict')) ) 
+    		#This loop rotates the list until host name is at the top
+    		while (list(contactList.keys())[0] != name):
+    			contactList = rotate_values(contactList)
     		print_list(contactList)
+    		contactList = rotate_values(contactList)
+    		nextName = list(contactList)[0]
+    		nextIP = contactList[nextName]['IP']
+    		nextPort = contactList[nextName]['port']
+    		print (nextIP + '\t' + nextPort) #<--- this is next client to send to
     	else: 
     		print(sendMessage.decode()) #<------ Causing duplicate messages on Client
 		#only exit with success

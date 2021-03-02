@@ -42,8 +42,6 @@ def multithread_server(client_stuff, clients_message):
     listen_system = (listen_system_ip, listen_system_port)
     serverSocket_2.sendto(message_test, listen_system)
     return
-    
-
 
 Server_Name = gethostname()
 Server_IP = gethostbyname(Server_Name + '.local')
@@ -92,9 +90,9 @@ while True:
     elif "join" in c.lower():
         if block_comms != True:        
             print("Joining " + command[1])
-            messageToClient = joinleave.join(command)
         else:
-            messageToClient = 'Cannot join ' + command[1] + ' while IM in Progress\n'        
+            messageToClient = 'Cannot join ' + command[1] + ' while IM in Progress\n'
+        messageToClient = joinleave.join(command)        
 
     elif "leave" in c.lower():
         if block_comms != True: 
@@ -113,7 +111,7 @@ while True:
     elif 'im-start' in c.lower():
         messageToClient = imstartcomp.im_start(command)
         block_comms = True
-        messageToClient += 'initiate-im\n' #honestly don't know if this will work...
+        #messageToClient += 'initiate-im\n' #honestly don't know if this will work...
         im_message = 'Oh ok, its messaging time\n'
         p1 = multiprocessing.Process(target=multithread_server('192.168.10.102', im_message))
         p1.start()
