@@ -27,7 +27,7 @@ def message_thread():  # Client Listening for incomming messages.
         try:
             #print('Working at this point')
             test_message, serverAdd = chat_Socket.recvfrom(2048)
-            print("Incomming: " + test_message + serverAdd)
+            print("Incomming: " + test_message.decode() + str(serverAdd))
             message = ''
 
         except OSError:
@@ -36,12 +36,13 @@ def message_thread():  # Client Listening for incomming messages.
 def send_message(sendto_Host, listIP, immess):  # Send message from one client to another?
     while True:
         try:
-            print('TODO')
-            clientName = str(sendto_Host)  # arbitrary, will need to be filled in by arguement "Sendto_Host" 
-            message = immess + listIP  # dict that was passed from rotate_values definition
+            #print('TODO')
+             # arbitrary, will need to be filled in by arguement "Sendto_Host" 
+            message = immess  # dict that was passed from rotate_values definition
             print(message)
-            chat_Socket.sendto(message.encode(), (clientName, int(10006)))  # Will need to 
-        except:
+            chat_Socket.sendto(message.encode(), (sendto_Host, 10006))  # Will need to
+            break
+        except OSError:
             break
 
 
@@ -94,8 +95,9 @@ while True:
             sendList = pickle.dumps(contactList).encode('base64', 'strict') #<--- Encode list to send over
             im_message = raw_input('Enter Your IM Message: \n') #<----- GET SENDER MESSAGE HERE
             
-            sendingMessage = multiprocessing.Process(target=send_message(nextIP,contactList,im_message))
-            sendingMessage.start()
+            send_message(nextIP, sendList, im_message)
+            #sendingMessage = multiprocessing.Process(target=send_message(nextIP,contactList,im_message)) #<--- additional process unneeded. 
+            #sendingMessage.start()
             #print(nextIP + '\t' + nextPort)  # <--- this is next client to send to
         else:
             print(sendMessage.decode())  
