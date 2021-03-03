@@ -53,7 +53,6 @@ print('Servers IP address: ' + Server_IP)
 print('Server monitoring port ' + str(serverPort))
 
 messageToClient = ''
-block_comms = False
 
 while True:
     print ('Awaiting instruction from a client...')
@@ -82,44 +81,24 @@ while True:
         
     elif "create" in c.lower():
         messageToClient = create.createList(command)
-        
-
     elif "query-list" in c.lower():        
         messageToClient = query.query_list()
-
     elif "join" in c.lower():
-        if block_comms != True:        
-            print("Joining " + command[1])
-        else:
-            messageToClient = 'Cannot join ' + command[1] + ' while IM in Progress\n'
         messageToClient = joinleave.join(command)        
-
     elif "leave" in c.lower():
-        if block_comms != True: 
-            print("Registered User " + command[2] + ' requesting to leave ' + command[1] + ' list..')
-            messageToClient = joinleave.leave(command)        
-        else:
-            messageToClient = 'Cannot leave ' + command[1] + ' while IM in Progress\n' 
-    elif "exit" in c.lower():
-        if block_comms != True:         
-            messageToClient = exitsave.exit(command)
-        else:
-            messageToClient = 'Cannot exit while IM in progress\n' 
+        messageToClient = joinleave.leave(command)        
+    elif "exit" in c.lower():         
+        messageToClient = exitsave.exit(command)
     elif 'save' in c.lower():
         messageToClient = exitsave.save(command)
-
     elif 'im-start' in c.lower():
         messageToClient = imstartcomp.im_start(command)
-        block_comms = True
-        #messageToClient += 'initiate-im\n' #honestly don't know if this will work...
         im_message = 'Oh ok, its messaging time\n'
         p1 = multiprocessing.Process(target=multithread_server('192.168.10.102', im_message))
         p1.start()
-    
     elif 'im-complete' in c.lower():
     	messageToClient = imstartcomp.im_complete(command)
         print("Done\n")
-        block_comms = False
     else: 
         messageToClient = 'INVALID COMMAND. Please try again'
         print('ALERT! Invalid command ' + '"' + c.capitalize() + '" entered by Client at IP ' + str(clientAddress[0]))

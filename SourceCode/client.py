@@ -6,9 +6,9 @@ import string
 import socket
 import time
 import pickle
+import utils
 from multiprocessing import *
 from collections import OrderedDict
-from collections import deque
 from socket import *
 from string import *
 
@@ -22,28 +22,6 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)  # Creates client's socket
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
 chat_Socket.bind(('', 10006))
 
-
-def print_list(listName):
-    feedback = ''
-    feedback += str(len(listName)) + '\n'
-    for contactName, detail in listName.items():
-        feedback += contactName + '\t'
-        for key in detail:
-            feedback += str(detail[key]) + '\t'
-
-        feedback += '\n'
-    print(feedback)
-    return
-
-
-def rotate_values(my_dict):  # rotate dict values (Is this going to be called in "Send_Message" ? )
-    values_deque = deque(my_dict.values())
-    keys_deque = deque(my_dict.keys())
-    values_deque.rotate(-1)
-    keys_deque.rotate(-1)
-    return OrderedDict(zip(keys_deque, values_deque))
-
-
 def message_thread():  # Client Listening for incomming messages. 
     while True:
         try:
@@ -54,7 +32,6 @@ def message_thread():  # Client Listening for incomming messages.
 
         except OSError:
             break
-
 
 def send_message(sendto_Host, listIP, immess):  # Send message from one client to another?
     while True:
@@ -79,50 +56,51 @@ message_process = multiprocessing.Process(target=message_thread)
 message_process.start()
 print('You have been connected to ' + serverName)
 while True:
-    # sendMessage, serverAddress = clientSocket.recvfrom(2048)
-
     message = raw_input('Enter Command: \n')  # Send prompt to client #new line added to prevent issues with input
     clientSocket.sendto(message.encode(), (serverName, serverPort))
+    #splits commands into args
+    command = message.split(" ")
+    # Receives message and address back from server, buffer size 2048
+    sendMessage, serverAddress = clientSocket.recvfrom(2048)
 
-    if 'im-start' in message:
-        # sendMessage, serverAddress = clientSocket.recvfrom(2048)
-        print('Starting IM. Please wait for Server\n')
-
-        # Receives message and address back from server, buffer size 2048
-        sendMessage, serverAddress = clientSocket.recvfrom(2048)
-        if 'initiate-im' in sendMessage.decode():
-            print("Host " + 'TODO' + 'initiated instant message with list')
-        im_message = raw_input('Enter Message: \n')
-        # Decodes and print receiving message 
-        if ('im-start' not in message):
-            print('test')  # sendMessage.decode())
-        else:  # If the im-start is success, get name and list from command, decodes message to dict
-            if 'FAILURE' not in sendMessage.decode():
-                command = message.split(" ")
-                contact = command[1]
-                name = command[2]
-                contactList = OrderedDict(pickle.loads(sendMessage.decode('base64', 'strict')))
-                # This loop rotates the list until host name is at the top
-                while (list(contactList.keys())[0] != name):
-                    contactList = rotate_values(contactList)
-                print_list(contactList)
-                contactList = rotate_values(contactList)
-                nextName = list(contactList)[0]
-                nextIP = contactList[nextName]['IP']
-                nextPort = contactList[nextName]['port']
-                sendingMessage = multiprocessing.Process(target=send_message(nextIP,contactList,im_message))
-                sendingMessage.start()
-                print(nextIP + '\t' + nextPort)  # <--- this is next client to send to
-            else:
-                print(sendMessage.decode())  # <------ Causing duplicate messages on Client
+    if ('im-start' not in message):
+	print(sendMessage.decode())
+    	#exit system
+    	if 'exit' in message and 'SUCCESS' in sendMessage.decode():
+        	clientSocket.close()
+        	message_process.terminate()
+        	sys.exit()
+        elif 'register' in message and 'SUCCESS' in sendMessage.decode(): 
+        	hostPort = command[3] #<----- we can bind host to this value
+        	
+    else:  # If the im-start is success, get name and list from command, decodes message to dict
+        if 'FAILURE' not in sendMessage.decode():
+            print('Starting IM. Please wait for Server\n')
+            contact = command[1] #get contact list name
+            name = command[2] #get name
+            contactList = OrderedDict(pickle.loads(sendMessage.decode('base64', 'strict')))
+            # This loop rotates the list until host name is at the top
+            while (list(contactList.keys())[0] != name):
+                contactList = utils.rotate_values(contactList)
+            utils.print_list(contactList)
+            
+            #Rotate next peer on top
+            contactList = utils.rotate_values(contactList) 
+            nextName = list(contactList)[0]
+            nextIP = contactList[nextName]['IP']
+            nextPort = contactList[nextName]['port']
+            
+            #These 2 will need to be sent as separate messages, so the list can be decoded properly
+            sendList = pickle.dumps(contactList).encode('base64', 'strict') #<--- Encode list to send over
+            im_message = raw_input('Enter Your IM Message: \n') #<----- GET SENDER MESSAGE HERE
+            
+            sendingMessage = multiprocessing.Process(target=send_message(nextIP,contactList,im_message))
+            sendingMessage.start()
+            #print(nextIP + '\t' + nextPort)  # <--- this is next client to send to
+        else:
+            print(sendMessage.decode())  
     # only exit with success
-    elif 'exit' in message.encode() and 'SUCCESS' in sendMessage.decode():
-        clientSocket.close()
-        message_process.terminate()
-        sys.exit()
+    
 # os._exit(1)
-    else:
-        sendMessage, serverAddress = clientSocket.recvfrom(2048)
-        print(sendMessage.decode())
 # Closes the socket and terminates the process
 # clientSocket.close()
