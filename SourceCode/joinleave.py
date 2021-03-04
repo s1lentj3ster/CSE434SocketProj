@@ -17,6 +17,7 @@ def join (command):
     if (contactName in databaseSet) and (listName in contactList)and not(contactName in contactList[listName]):
             if (listName in inProcess):
                 feedback = 'FAILURE.\nYou cannot join right now, an IM is in process.\n'
+                return feedback
             #ok Im sure there is a more elegant way than this so please feel free to optimize it
             ip = databaseSet[contactName]["IP"]
             port = databaseSet[contactName]["port"]

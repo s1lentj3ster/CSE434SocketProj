@@ -56,16 +56,12 @@ messageToClient = ''
 
 while True:
     print ('Awaiting instruction from a client...')
-    
-    
+       
     #Receives client message, IP address and port number
     message, clientAddress = serverSocket.recvfrom(2048)
-    
-    
+        
     #Processes client's requests and splits into a list of keywords
     command = list(message.decode('latin').split(" "))
-    
-   
    
     c = command[0]
     print(c.capitalize() + " process requested by client at IP " + str(clientAddress[0]))
@@ -99,7 +95,7 @@ while True:
     elif 'im-complete' in c.lower():
     	messageToClient = imstartcomp.im_complete(command)
         print("Done\n")
-    else: 
+    elif (not command): 
         messageToClient = 'INVALID COMMAND. Please try again'
         print('ALERT! Invalid command ' + '"' + c.capitalize() + '" entered by Client at IP ' + str(clientAddress[0]))
 
