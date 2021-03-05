@@ -11,7 +11,6 @@ from multiprocessing import *
 from collections import OrderedDict
 from socket import *
 from string import *
-from utils import imList
 
 serverName = sys.argv[1]  # <--- Server IP address here
 serverPort = int(sys.argv[2])  # Server's port number
@@ -25,12 +24,18 @@ chat_Socket = socket(AF_INET, SOCK_DGRAM)
 
 
 def message_thread():  # Client Listening for incomming messages.
-    while True:
+    listName = ''
+    im_message = ''
+    nextIP = ''
+    nextPort = 0
+    sendList = []
+    done = True
+    
+    while done:
         try:
             # print('hello')
-            listName = ''
-            im_message = ''
             message, serverAdd = chat_Socket.recvfrom(2048)
+
             if ('Incoming: ' in message.decode()):
                 im_message = message.decode()
                 print(im_message + ' from ' + serverAdd[0] + ' ' + str(serverAdd[1]))
@@ -38,7 +43,7 @@ def message_thread():  # Client Listening for incomming messages.
                 contact = message.decode()
                 print(contact)
                 listName = contact.replace('List: ', '')
-                print(listName)
+                #print(listName)
             else:
                 contactList = OrderedDict(pickle.loads(message.decode('base64', 'strict')))
                 utils.print_list(contactList)
@@ -48,16 +53,15 @@ def message_thread():  # Client Listening for incomming messages.
                 nextIP = contactList[nextName]['IP']
                 nextPort = contactList[nextName]['port']
                 sendList = pickle.dumps(contactList).encode('base64', 'strict')
-
-                if (listName not in imList):
-                    send_message(nextIP, nextPort, sendList, im_message, contact)
-                else:
-                    print("SUCCESS!")
-                    break
+		
+                send_message(nextIP, nextPort, sendList, im_message, listName)
+                print ('SUCCESS')
+                done = False
+		break
             message = ''
         except OSError:
             break
-
+    return
 
 def send_message(sendto_Host, sendto_Port, listIP, immess, listName):  # Send message from one client to another?
     while True:
@@ -74,6 +78,8 @@ def send_message(sendto_Host, sendto_Port, listIP, immess, listName):  # Send me
             break
         except OSError:
             break
+    	break
+    return
 
 
 if (serverPort < 10000 or serverPort > 10499):
@@ -113,7 +119,7 @@ while True:
             while (list(contactList.keys())[0] != name):
                 contactList = utils.rotate_values(contactList)
             utils.print_list(contactList)
-
+	    
             # Rotate next peer on top
             contactList = utils.rotate_values(contactList)
             nextName = list(contactList)[0]
@@ -124,8 +130,8 @@ while True:
             sendList = pickle.dumps(contactList).encode('base64', 'strict')  # <--- Encode list to send over
             im_message = raw_input('Enter Your IM Message: \n')  # <----- GET SENDER MESSAGE HERE
             im_message = 'Incoming: ' + im_message
+
             send_message(nextIP, nextPort, sendList, im_message, contact)
-            imList.append(contact)
 
         else:
             print(sendMessage.decode())

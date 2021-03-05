@@ -12,8 +12,6 @@ databaseSet = {}
 global inProcess
 inProcess = {}
 
-global imList
-imList = []
 
 def rotate_values(my_dict):  # rotate dict values (Is this going to be called in "Send_Message" ? )
     values_deque = deque(my_dict.values())
