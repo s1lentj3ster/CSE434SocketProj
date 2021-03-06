@@ -24,48 +24,59 @@ chat_Socket = socket(AF_INET, SOCK_DGRAM)
 
 
 def message_thread():  # Client Listening for incomming messages.
-    listName = ''
-    im_message = ''
-    nextIP = ''
-    nextPort = 0
-    sendList = []
-    done = True
     
-    while done:
-        try:
-            # print('hello')
+    
+    while True:
+        try:       
             message, serverAdd = chat_Socket.recvfrom(2048)
-
-            if ('Incoming: ' in message.decode()):
-                im_message = message.decode()
-                print(im_message + ' from ' + serverAdd[0] + ' ' + str(serverAdd[1]))
-            elif ('List: ' in message.decode()):
-                contact = message.decode()
-                print(contact)
-                listName = contact.replace('List: ', '')
-                #print(listName)
-            else:
-                contactList = OrderedDict(pickle.loads(message.decode('base64', 'strict')))
-                utils.print_list(contactList)
-
-                contactList = utils.rotate_values(contactList)
-                nextName = list(contactList)[0]
-                nextIP = contactList[nextName]['IP']
-                nextPort = contactList[nextName]['port']
-                sendList = pickle.dumps(contactList).encode('base64', 'strict')
-		
-                send_message(nextIP, nextPort, sendList, im_message, listName)
-                print ('SUCCESS')
-                done = False
-		break
-            message = ''
+            message_process(message, serverAdd)
         except OSError:
             break
-    return
+
+                
+            
+def message_process(message, serverAdd):
+
+        listName = ''
+        im_message = ''
+        nextIP = ''
+        nextPort = 0
+        sendList = []
+        done = True
+        while done: 
+            try:
+                if ('Incoming: ' in message.decode()):
+                    im_message = message.decode()
+                    print(im_message + ' from ' + serverAdd[0] + ' ' + str(serverAdd[1]))
+                    #message = ''
+                elif ('List: ' in message.decode()):
+                    contact = message.decode()
+                    print(contact)
+                    listName = contact.replace('List: ', '')
+                    #print(listName)
+                else:
+                    contactList = OrderedDict(pickle.loads(message.decode('base64', 'strict')))
+                    utils.print_list(contactList)
+
+                    contactList = utils.rotate_values(contactList)
+                    nextName = list(contactList)[0]
+                    nextIP = contactList[nextName]['IP']
+                    nextPort = contactList[nextName]['port']
+                    sendList = pickle.dumps(contactList).encode('base64', 'strict')
+		
+                    send_message(nextIP, nextPort, sendList, im_message, listName)
+                    print ('SUCCESS')
+                    done = False
+		    
+                    message = ''
+                break
+            except OSError:
+                break
+    
 
 def send_message(sendto_Host, sendto_Port, listIP, immess, listName):  # Send message from one client to another?
-    while True:
-        try:
+    #while True:
+       
             message = immess  # dict that was passed from rotate_values definition
             chat_Socket.sendto(message.encode(), (sendto_Host, int(sendto_Port)))
             # print(sendto_Host + sendto_Port)
@@ -75,11 +86,12 @@ def send_message(sendto_Host, sendto_Port, listIP, immess, listName):  # Send me
             chat_Socket.sendto(message.encode(), (sendto_Host, int(sendto_Port)))
             # print(message)  
             # Will need to
-            break
-        except OSError:
-            break
-    	break
-    return
+            return
+            
+      
+            
+    	
+    #return
 
 
 if (serverPort < 10000 or serverPort > 10499):
@@ -105,7 +117,8 @@ while True:
             sys.exit()
         elif 'register' in message and 'SUCCESS' in sendMessage.decode():
             hostPort = command[3]  # <----- we can bind host to this value
-            chat_Socket.bind(('', int(hostPort)))
+            chat_Socket.bind((str(command[2]), int(hostPort)))
+            #chat_Socket.setsockopt(IPPROTO_IP,IP_MULTICAST_TTL,20)
             print('Started Message_Process')
 
 
