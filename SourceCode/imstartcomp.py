@@ -7,10 +7,8 @@ from utils import databaseSet
 from utils import inProcess
 
 def im_start(command):
-
     feedback = ''
     count = 0
-    print("TODO")
     if len(command) != 3:
         feedback = '0\nFAILURE.\nPlease enter in sufficient parameters. Usage: im-start <contact-list-name> <contact-name>\n'
         return feedback
@@ -37,7 +35,6 @@ def im_start(command):
         return feedback
 
 def im_complete(command):
-    print("TODO")
     feedback = ''
     if len(command) != 3:
         feedback = 'FAILURE.\nPlease enter in sufficient parameters. Usage: im-start <contact-list-name> <contact-name>\n'

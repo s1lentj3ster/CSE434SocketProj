@@ -19,80 +19,52 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)  # Creates client's socket
 # Use Port 10005 for communication Client to Client (Peer to Peer)
 chat_Socket = socket(AF_INET, SOCK_DGRAM)
 
-
 # chat_Socket.bind(('', 10006))
 
 
 def message_thread():  # Client Listening for incomming messages.
-    
-    
     while True:
         try:       
             message, serverAdd = chat_Socket.recvfrom(2048)
-            message_process(message, serverAdd)
+            nextIP, nextPort, sendList, im_message, listName, count = message_processing(message, serverAdd)
+            if (count > 0):
+            	send_message(nextIP, nextPort, sendList, im_message, listName, count)
+            else:
+            	print('SUCCESS\n')
         except OSError:
             break
-
-                
-            
-def message_process(message, serverAdd):
-
+    return    
+def message_processing(message, serverAdd):
         listName = ''
-        im_message = ''
         nextIP = ''
         nextPort = 0
         sendList = []
-        done = True
-        while done: 
-            try:
-                if ('Incoming: ' in message.decode()):
-                    im_message = message.decode()
-                    print(im_message + ' from ' + serverAdd[0] + ' ' + str(serverAdd[1]))
-                    #message = ''
-                elif ('List: ' in message.decode()):
-                    contact = message.decode()
-                    print(contact)
-                    listName = contact.replace('List: ', '')
-                    #print(listName)
-                else:
-                    contactList = OrderedDict(pickle.loads(message.decode('base64', 'strict')))
-                    utils.print_list(contactList)
 
-                    contactList = utils.rotate_values(contactList)
-                    nextName = list(contactList)[0]
-                    nextIP = contactList[nextName]['IP']
-                    nextPort = contactList[nextName]['port']
-                    sendList = pickle.dumps(contactList).encode('base64', 'strict')
-		
-                    send_message(nextIP, nextPort, sendList, im_message, listName)
-                    print ('SUCCESS')
-                    done = False
-		    
-                    message = ''
-                break
-            except OSError:
-                break
-    
+        try:
+            output = list(pickle.loads(message.decode('base64','strict')))
+            im_message = output[1]
+	    listName = output[0]           
+            contactList = output[2]
+            count = int(output[3]) - 1
+            print('Incoming: ' + im_message + ' from ' + serverAdd[0] + ' ' + str(serverAdd[1]))
+	    print ('List: ' + listName)
+            contactList = OrderedDict(pickle.loads(contactList.decode('base64', 'strict')))
+            utils.print_list(contactList)
 
-def send_message(sendto_Host, sendto_Port, listIP, immess, listName):  # Send message from one client to another?
-    #while True:
-       
-            message = immess  # dict that was passed from rotate_values definition
-            chat_Socket.sendto(message.encode(), (sendto_Host, int(sendto_Port)))
-            # print(sendto_Host + sendto_Port)
-            message = 'List: ' + listName
-            chat_Socket.sendto(message.encode(), (sendto_Host, int(sendto_Port)))
-            message = listIP
-            chat_Socket.sendto(message.encode(), (sendto_Host, int(sendto_Port)))
-            # print(message)  
-            # Will need to
+            contactList = utils.rotate_values(contactList)
+            nextName = list(contactList)[0]
+            nextIP = contactList[nextName]['IP']
+            nextPort = contactList[nextName]['port']
+            sendList = pickle.dumps(contactList).encode('base64', 'strict')
+	    return nextIP, nextPort, sendList, im_message, listName, count 
+        except OSError:
+    	    return
+
+def send_message(sendto_Host, sendto_Port, listIP, immess, listName, count):  # Send message from one client to another?
+       	    send = [immess, listName, listIP, count]
+       	    send = pickle.dumps(send).encode('base64', 'strict')
+       	    chat_Socket.sendto(send.encode(), (sendto_Host, int(sendto_Port)))
             return
-            
-      
-            
-    	
-    #return
-
 
 if (serverPort < 10000 or serverPort > 10499):
     print('Please use port between 10000 and 10499\n')
@@ -142,9 +114,11 @@ while True:
             # These 2 will need to be sent as separate messages, so the list can be decoded properly
             sendList = pickle.dumps(contactList).encode('base64', 'strict')  # <--- Encode list to send over
             im_message = raw_input('Enter Your IM Message: \n')  # <----- GET SENDER MESSAGE HERE
-            im_message = 'Incoming: ' + im_message
-
-            send_message(nextIP, nextPort, sendList, im_message, contact)
+            im_message = im_message
+            
+            count = str(len(contactList))
+            
+            send_message(nextIP, nextPort, sendList, im_message, contact, count)
 
         else:
             print(sendMessage.decode())

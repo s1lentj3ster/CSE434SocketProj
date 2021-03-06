@@ -27,7 +27,6 @@ def print_list(listName):
         feedback += contactName + '\t'
         for key in detail:
             feedback += str(detail[key]) + '\t'
-
         feedback += '\n'
     print(feedback)
     return
