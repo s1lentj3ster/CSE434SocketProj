@@ -75,6 +75,7 @@ message_process.start()
 
 #Client-Server interaction
 print('You have been connected to ' + serverName)
+print('Your address is: '+ utils.get_ip())
 while True:
     message = raw_input('Enter Command: \n')  # Send prompt to client #new line added to prevent issues with input
     clientSocket.sendto(message.encode(), (serverName, serverPort))

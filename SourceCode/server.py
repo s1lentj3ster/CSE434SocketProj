@@ -42,7 +42,7 @@ def multithread_server(client_stuff, clients_message):
     return
 
 Server_Name = gethostname()
-Server_IP = gethostbyname(Server_Name + '.local')
+Server_IP = utils.get_ip()
 
 #Prints server address and message
 print ('Connecting...\n')
@@ -50,9 +50,8 @@ print('Server Name: ' + Server_Name)
 print('Servers IP address: ' + Server_IP)
 print('Server monitoring port ' + str(serverPort))
 
-messageToClient = ''
-
 def server_process():
+    messageToClient = ''
     while True:
         print ('Awaiting instruction from a client...')
   
@@ -100,7 +99,7 @@ def server_process():
 
         #Attach the address to encoded message and send into serverSocket 
         serverSocket.sendto(messageToClient.encode(), clientAddress)
-        messageToClient = ''
+        messageToClient = '' #clears buffer
 
 server = multiprocessing.Process(target=server_process)
 server.start()

@@ -1,6 +1,8 @@
 #utils.py
 from collections import deque
 from collections import OrderedDict
+import socket
+from socket import *
 
 global contactList
 contactList = {}
@@ -30,3 +32,15 @@ def print_list(listName):
         feedback += '\n'
     print(feedback)
     return
+
+def get_ip():
+    s = socket(AF_INET, SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(("8.8.8.8", 80))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP

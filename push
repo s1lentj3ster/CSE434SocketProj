@@ -1,0 +1,12 @@
+#!/usr/bin/expect -f
+
+send_user "Enter service \n"
+expect_user -re "(.*)\n"
+set service $expect_out(1,string)
+send_user "Enter port \n"
+expect_user -re "(.*)\n"
+set port $expect_out(1,string)
+spawn scp -r -i ~/id_geni_ssh_rsa -P $port ./SourceCode/ $service:~/
+expect "Enter passphrase for key '/home/thydo/id_geni_ssh_rsa':"
+send "Mrpiggey2604!\r"
+interact
