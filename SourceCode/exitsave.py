@@ -25,7 +25,7 @@ def exit(command):
             if contact_name in contactList[n]:
                 contactList[n].pop(contact_name)
                 #contactcount = contactcount + 1
-                print('Removed ' + contact_name + ' from Contact lists')
+                print('Removed ' + contact_name + ' from Contact lists.\n')
    
     #Removing from Registered User Database
     if contact_name in databaseSet:

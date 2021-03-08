@@ -36,7 +36,7 @@ def join (command):
 
 def leave (command):
     if len(command) != 3:
-        feedback = 'FAIL.\nPlease enter sufficient parameters.\nUsage: leave <contact-list-name> <contact-name>'
+        feedback = 'FAILURE.\nPlease enter sufficient parameters.\nUsage: leave <contact-list-name> <contact-name>'
         return feedback
     listName = command[1]
     contactName = command[2]
@@ -46,7 +46,7 @@ def leave (command):
         contactList[listName].pop(contactName)
         feedback = 'SUCCESS.\nYou have successfully left '+listName+'\n'
     else:
-        feedback = 'FAIL.\nYou are not registered, or '+listName+' does not exist, or your name does not exist in this list.\n'
+        feedback = 'FAILURE.\nYou are not registered, or '+listName+' does not exist, or your name does not exist in this list.\n'
     for name, contact in contactList.items():
         print(name, contact)
     return feedback
